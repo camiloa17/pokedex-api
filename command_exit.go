@@ -5,7 +5,7 @@ import (
 	"syscall"
 )
 
-func commandExit() error {
+func commandExit(conf *apiConfig) error {
 	fmt.Println("Goodbye!")
 	syscall.Exit(0)
 	return nil
