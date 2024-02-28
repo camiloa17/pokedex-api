@@ -4,7 +4,7 @@ import (
 	"fmt"
 )
 
-func commandMapf(conf *apiConfig) error {
+func commandMapf(conf *apiConfig, args ...string) error {
 	locations, err := conf.client.ListLocations(conf.next)
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func commandMapf(conf *apiConfig) error {
 	return nil
 }
 
-func commandMapb(conf *apiConfig) error {
+func commandMapb(conf *apiConfig, args ...string) error {
 	locations, err := conf.client.ListLocations(conf.previous)
 	if err != nil {
 		return err

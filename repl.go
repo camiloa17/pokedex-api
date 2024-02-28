@@ -21,16 +21,20 @@ func startRepl(config *apiConfig) {
 		fmt.Print("Pokedex > ")
 		reader.Scan()
 
-		word := cleanInput(reader.Text())
-		if len(word) == 0 {
+		words := cleanInput(reader.Text())
+		if len(words) == 0 {
 			continue
 		}
 
-		commandName := word
+		commandName := words[0]
+		args := []string{}
+		if len(words) > 1 {
+			args = words[1:]
+		}
 
 		command, exists := getCommands()[commandName]
 		if exists {
-			err := command.callback(config)
+			err := command.callback(config, args...)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -42,16 +46,16 @@ func startRepl(config *apiConfig) {
 	}
 }
 
-func cleanInput(text string) string {
+func cleanInput(text string) []string {
 	output := strings.ToLower(text)
-	words := strings.TrimSpace(output)
+	words := strings.Fields(output)
 	return words
 }
 
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*apiConfig) error
+	callback    func(apiConfig *apiConfig, args ...string) error
 }
 
 func getCommands() map[string]cliCommand {
@@ -75,6 +79,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Get the previous page of locations",
 			callback:    commandMapb,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Get the information of pokemon in a specific area",
+			callback:    explore,
 		},
 	}
 }
